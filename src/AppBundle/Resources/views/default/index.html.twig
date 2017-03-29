@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>S3 Browser</title>
+	<link rel="shortcut icon" type="image/png" href="/media/images/favicon.png">
+	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.datatables.net/rss.xml">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.2.1.min.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>  
+</head>
+<body class="">
+    <table id="basicTable" class="table table-striped table-bordered" width="100%">
+        <thead>
+            <tr>
+                <th class="sorting_asc">Name</th>
+                <th>Size</th>
+                <th>Action</th>
+                <th>Status</th>
+
+            </tr>
+        </thead>
+    </table>
+
+
+
+ <script type="text/javascript">
+         $(document).ready(function () {
+            var table = $('#basicTable').dataTable({
+                processing: true,
+                ajax: '/search',
+                columns: [
+                    {"data": "Key"},
+                    {"data": "Size"},
+                    {"data": "StorageClass"},
+                    {"data": "StorageClass"},
+                ],
+                createdRow: function (row, data, index) {
+                    $('td', row).eq(0).html('<a target="_blank" href="https://s3.amazonaws.com/99s3/'+data.Key+'">'+data.Key+'</a>');
+                    //$('td', row).eq(1).html('<img src="' + data.picture + '" class="lazyload" style="width:250px">');
+                    $('td', row).eq(2).html('<button data-id="'+data.Key+'">Download</button>');
+                    $('td', row).eq(3).html('Active');
+                }
+            });
+            $('#basicTable tbody').on('click', 'button', function () {
+                window.open('https://s3.amazonaws.com/99s3/'+$(this).data('id'), '_blank');
+            } );
+        });
+    </script>	
+</body>
+</html>
